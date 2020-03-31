@@ -25,6 +25,7 @@ namespace StudentManagement.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=StudentDb;Trusted_Connection=True;");
             }
         }
@@ -36,6 +37,30 @@ namespace StudentManagement.Context
                 entity.Property(e => e.Description).IsUnicode(false);
 
                 entity.Property(e => e.Name).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Fees>(entity =>
+            {
+                entity.HasOne(d => d.StudentCourse)
+                    .WithMany(p => p.Fees)
+                    .HasForeignKey(d => d.StudentCourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Fees_StudentCourses");
+            });
+
+            modelBuilder.Entity<StudentCourses>(entity =>
+            {
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.StudentCourses)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourses_Courses");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.StudentCourses)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourses_Students");
             });
 
             modelBuilder.Entity<Students>(entity =>
