@@ -80,6 +80,7 @@ namespace StudentManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<Fees>> PostFees(Fees fees)
         {
+            //2 feeid
             _context.Fees.Add(fees);
             await _context.SaveChangesAsync();
             //feesid
