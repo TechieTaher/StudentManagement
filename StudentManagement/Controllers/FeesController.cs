@@ -83,7 +83,7 @@ namespace StudentManagement.Controllers
             //2 feeid
             _context.Fees.Add(fees);
             await _context.SaveChangesAsync();
-
+            //feesid
             return CreatedAtAction("GetFees", new { id = fees.FeeId }, fees);
         }
 
